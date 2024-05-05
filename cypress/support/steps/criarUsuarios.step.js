@@ -1,4 +1,10 @@
-import { Given, When, Then, After } from "cypress-cucumber-preprocessor/steps";
+import {
+  Given,
+  When,
+  Then,
+  After,
+  But,
+} from "cypress-cucumber-preprocessor/steps";
 import { PaginaDeCastrato } from "../pages/CadastrarUsuarios";
 let cadastroUsuario = new PaginaDeCastrato();
 let userId;
@@ -24,6 +30,59 @@ Then("tenho um usuário cadastrado", function () {
   cy.contains("Usuário salvo com sucesso!").should("be.visible");
 });
 
-after(function () {
+after({ tags: "@criarUsuarioNoBd" }, function () {
   cy.deletarUsuario(userId);
 });
+
+When("informo um email válido", function () {
+  cadastroUsuario.typeEmail();
+});
+
+But("não informo um nome", function () {});
+
+Then("não é possível cadastrar o usuário sem nome", function () {
+  cy.contains("span", "O campo nome é obrigatório.").should("be.visible");
+});
+
+When("informo um nome válido", function () {
+  cadastroUsuario.typeNome();
+});
+
+But("não informo um email", function () {});
+
+When("clico no botão de cadastrar", function () {
+  cadastroUsuario.clickcadastrar();
+});
+
+Then("não é possível cadastrar o usuário sem email", function () {
+  cy.contains("span", "O campo e-mail é obrigatório.").should("be.visible");
+});
+
+When("não informo um nome", function () {});
+
+When("não é possível cadastrar o usuário sem nome e email", function () {
+  cy.contains("span", "O campo nome é obrigatório.").should("be.visible");
+  cy.contains("span", "O campo e-mail é obrigatório.").should("be.visible");
+});
+
+But("informo um email inválido {string}", function (emailInvalido) {
+  cy.get("input#email").type(emailInvalido);
+});
+
+Then(
+  "aparecerá uma mensagem dizendo que o formato do email é inválido",
+  function () {
+    cy.contains("span", "Formato de e-mail inválido").should("be.visible");
+  }
+);
+
+When("informo um nome inválido {string}", function (nomelInvalido) {
+  cy.get("input#name").type(nomelInvalido);
+});
+
+Then(
+  "aparecerá uma mensagem dizendo que o formato do nome é inválido",
+  function () {
+    cy.contains("span", "Formato do nome é inválido.").should("be.visible");
+  }
+);

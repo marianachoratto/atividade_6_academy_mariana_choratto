@@ -12,7 +12,7 @@ export class PaginaDeCastrato {
   pgDetalhesInputId = "[name='id']";
 
   typeNome() {
-    let nome = "faker" + faker.person.firstName();
+    let nome = "faker " + faker.person.firstName();
     cy.get(this.inputName).type(nome);
   }
 
