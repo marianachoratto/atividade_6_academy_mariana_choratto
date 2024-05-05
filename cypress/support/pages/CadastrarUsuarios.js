@@ -1,4 +1,6 @@
-export default class PaginaDeCastrato {
+import { faker } from "@faker-js/faker";
+
+export class PaginaDeCastrato {
   inputName = "input#name";
   inputEmail = "input#email";
   buttonSave = '[type="submit"]';
@@ -9,11 +11,13 @@ export default class PaginaDeCastrato {
   pgDetalhesInputEmail = "[name='email']";
   pgDetalhesInputId = "[name='id']";
 
-  typeNome(nome) {
+  typeNome() {
+    let nome = "faker" + faker.person.firstName();
     cy.get(this.inputName).type(nome);
   }
 
-  typeEmail(email) {
+  typeEmail() {
+    let email = faker.internet.email();
     cy.get(this.inputEmail).type(email);
   }
 
