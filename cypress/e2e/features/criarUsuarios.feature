@@ -24,10 +24,6 @@ Cenário: deve ser possível abrir a página de perfil do usuário através do s
     Então escrevo o id do usuário na URL
     E vejo se existe uma página de perfil para aquele usuário em específico
 
-
-
-
-
 Cenário: Não deve ser possível cadastrar usuário sem nome 
     Quando informo um email válido
     Mas não informo um nome

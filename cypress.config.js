@@ -6,7 +6,7 @@ module.exports = defineConfig({
     baseUrl: "https://rarocrud-frontend-88984f6e4454.herokuapp.com/",
     env: {
       TAGS: "not @ignore",
-      // @criarUsuarioNoBd, @deletarUsuario
+      // @criarUsuarioNoBd, @deletarUsuario, @tag6Usuarios
     },
     specPattern: "cypress/e2e/**/*.feature",
     setupNodeEvents(on, config) {
