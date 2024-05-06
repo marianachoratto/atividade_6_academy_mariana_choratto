@@ -3,7 +3,7 @@ export class PaginaPrincipal {
   anchorVerDetalhes = "#userDataDetalhe";
   inputDePesquisa = '[autocomplete="off"]';
   divListaDeUsuarios = "#listaUsuarios > #userData";
-  divDadosUsuarios = "#userData";
+  divDadosUsuarios = "[id='userData']";
   pNome = "#userDataName";
   buttonsPesquisar = ".sc-iGgWBj.cvYpuE";
 
@@ -13,7 +13,7 @@ export class PaginaPrincipal {
 
   // ver se vai precisar nos testes
   anchorRaro = '[href="/"]';
-  anchorVoltar = '[href="/users/novo"]';
+  anchorNovo = '[href="/users/novo"]';
 
   clickDelete() {
     cy.get(this.buttonDelete).first().click();

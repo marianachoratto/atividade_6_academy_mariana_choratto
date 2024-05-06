@@ -13,8 +13,55 @@ Before({ tags: "@tag6Usuarios" }, function () {
   }).as("intercept6Usuarios");
 });
 
+Before({ tags: "@tag2Usuarios" }, function () {
+  cy.intercept("GET", "api/v1/users", {
+    statusCode: 200,
+    fixture: "lista2Usuarios.json",
+  }).as("intercept2Usuarios");
+});
+
+Before({ tags: "@tag12Usuarios" }, function () {
+  cy.intercept("GET", "api/v1/users", {
+    statusCode: 200,
+    fixture: "lista12Usuarios.json",
+  }).as("intercept12Usuarios");
+});
+
+Before({ tags: "@noUsers" }, function () {
+  cy.intercept("GET", "api/v1/users", {
+    statusCode: 200,
+  }).as("interceptnoUsers");
+});
+
 Then("que acessei a página principal", function () {
   cy.visit("/users");
+});
+
+Given("desejo dar refresh na página principal", function () {
+  cy.get(pgPrincipal.anchorRaro).should("be.visible");
+});
+
+Then("clico no link R na esquerda da página", function () {
+  cy.get(pgPrincipal.anchorRaro).click();
+});
+
+Then("ela atualiza", function () {
+  cy.url().should(
+    "equal",
+    "https://rarocrud-frontend-88984f6e4454.herokuapp.com/users"
+  );
+});
+
+Given("desejo ir para a página de cadastro", function () {
+  cy.get(pgPrincipal.anchorNovo).should("be.visible");
+});
+
+Then("clico no link Novo, na esquerda da página", function () {
+  cy.get(pgPrincipal.anchorNovo).click();
+});
+
+Then("o site vai até a página esperada", function () {
+  cy.url().should("equal", baseURL + "novo");
 });
 
 Given("vi que havia 6 usuários cadastrados", function () {
@@ -45,3 +92,81 @@ Then(
     });
   }
 );
+
+Given("vi que havia 2 usuários cadastrados", function () {
+  cy.wait("@intercept2Usuarios");
+});
+
+Then("o total de cards de usuários deve ser 2", function () {
+  cy.get(pgPrincipal.divListaDeUsuarios).should("have.length", 2);
+});
+
+Given("vi que havia 12 usuários cadastrados", function () {
+  cy.wait("@intercept12Usuarios");
+});
+
+Then("na primeira página haverá os usuários de 1 a 6", function () {
+  cy.get(pgPrincipal.divListaDeUsuarios).should("have.length", 6);
+  cy.get(pgPrincipal.liTextoPaginas).should("have.text", "1 de 2");
+  cy.contains("p", "Nome:")
+    .invoke("text")
+    .should("be.equal", "Nome: Usuário mockado");
+  cy.contains("p", "E-mail:")
+    .invoke("text")
+    .should("be.equal", "E-mail: usariomockado@qa.com");
+});
+
+Then("o botão de anterior estará desabilitado", function () {
+  cy.get(pgPrincipal.paginaAnterior).should("be.disabled");
+});
+
+Then("o botão de próximo estará habilitado", function () {
+  cy.get(pgPrincipal.paginaProxima).should("be.enabled");
+});
+
+Then("a segunda página deverá trazer os usuários de 7 a 12", function () {
+  cy.get(pgPrincipal.paginaProxima).click();
+
+  cy.get(pgPrincipal.liTextoPaginas).should("have.text", "2 de 2");
+  cy.contains("p", "Nome:")
+    .invoke("text")
+    .should("be.equal", "Nome: Usuário mockado Pg 2");
+  cy.contains("p", "E-mail:")
+    .invoke("text")
+    .should("be.equal", "E-mail: usariomockado@qa.com");
+});
+
+Then("o botão de anterior estará habilitado", function () {
+  cy.get(pgPrincipal.paginaAnterior).should("be.enabled");
+});
+
+Then("o botão de próximo estará desabilitado", function () {
+  cy.get(pgPrincipal.paginaProxima).should("be.disabled");
+});
+
+Given("vi que não haviam usuários cadastrados", function () {
+  cy.wait("@interceptnoUsers");
+});
+
+Then(
+  "aparecerá uma mensagem dizendo que não há usuários para serem exibidos",
+  function () {
+    cy.contains(
+      "h3",
+      "Ops! Não existe nenhum usuário para ser exibido."
+    ).should("be.visible");
+  }
+);
+
+Then("aparecerá um link de cadastro de usuário", function () {
+  cy.contains("p", "Cadastre um novo usuário").should("be.visible");
+  cy.get(pgPrincipal.divDadosUsuarios).should("not.exist");
+});
+
+Then("clico no link de cadastro de usuário", function () {
+  cy.contains("p", "Cadastre um novo usuário").click();
+});
+
+Then("serei redirecionado para a página de cadastro", function () {
+  cy.url().should("equal", baseURL + "novo");
+});
