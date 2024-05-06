@@ -15,7 +15,7 @@ let emailUser;
 let userId;
 let userName;
 
-Before({ tags: "@criarUsuarioNoBd" }, function () {
+Before({ tags: "@criarUsuario" }, function () {
   cy.cadastrarUsuário().then(function (resposta) {
     emailUser = resposta.email;
     userId = resposta.id;

@@ -51,7 +51,7 @@ Cenário: Acessando site com 0 usuários cadastrados no banco de dados
     Então clico no link de cadastro de usuário
     E serei redirecionado para a página de cadastro
 
-@criarUsuarioNoBd @deletarUsuario
+@criarUsuario @deletarUsuario
 Cenário: Apertando o botão ver detalhes de um card de usuário
     Quando aperto o botão ver detalhes
     Então serei redirecionada para a página de detalhes
