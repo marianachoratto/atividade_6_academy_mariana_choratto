@@ -1,10 +1,44 @@
-import { Given, When, Then, Before } from "cypress-cucumber-preprocessor/steps";
+import {
+  Given,
+  When,
+  Then,
+  Before,
+  After,
+} from "cypress-cucumber-preprocessor/steps";
 import { PaginaPrincipal } from "../pages/PaginaPrincipal";
 import { PaginaDetalhes } from "../pages/PaginaDetalhes";
 
 let pgPrincipal = new PaginaPrincipal();
 let pagDetalhes = new PaginaDetalhes();
 let baseURL = "https://rarocrud-frontend-88984f6e4454.herokuapp.com/users/";
+let emailUser;
+let userId;
+let userName;
+
+Before({ tags: "@criarUsuarioNoBd" }, function () {
+  cy.cadastrarUsuário().then(function (resposta) {
+    emailUser = resposta.email;
+    userId = resposta.id;
+    userName = resposta.nome;
+
+    cy.intercept("GET", "api/v1/users", {
+      statusCode: 200,
+      body: [
+        {
+          id: userId,
+          name: userName,
+          email: emailUser,
+          createdAt: "2024-04-27T20:56:45.656Z",
+          updatedAt: "2024-04-27T20:56:45.656Z",
+        },
+      ],
+    }).as("getUsers");
+  });
+});
+
+After({ tags: "@deletarUsuario" }, function () {
+  cy.deletarUsuario(userId);
+});
 
 Before({ tags: "@tag6Usuarios" }, function () {
   cy.intercept("GET", "/api/v1/users", {
@@ -41,7 +75,7 @@ Given("desejo dar refresh na página principal", function () {
   cy.get(pgPrincipal.anchorRaro).should("be.visible");
 });
 
-Then("clico no link R na esquerda da página", function () {
+When("clico no link R na esquerda da página", function () {
   cy.get(pgPrincipal.anchorRaro).click();
 });
 
@@ -56,7 +90,7 @@ Given("desejo ir para a página de cadastro", function () {
   cy.get(pgPrincipal.anchorNovo).should("be.visible");
 });
 
-Then("clico no link Novo, na esquerda da página", function () {
+When("clico no link Novo, na esquerda da página", function () {
   cy.get(pgPrincipal.anchorNovo).click();
 });
 
@@ -169,4 +203,23 @@ Then("clico no link de cadastro de usuário", function () {
 
 Then("serei redirecionado para a página de cadastro", function () {
   cy.url().should("equal", baseURL + "novo");
+});
+
+When("aperto o botão ver detalhes", function () {
+  cy.wait("@getUsers");
+  cy.visit("/users");
+  cy.get(pgPrincipal.anchorVerDetalhes).click();
+});
+
+Then("serei redirecionada para a página de detalhes", function () {
+  cy.url().should(
+    "equal",
+    `https://rarocrud-frontend-88984f6e4454.herokuapp.com/users/${userId}`
+  );
+});
+
+Then("ali estarão as informações de id, nome e email do usuário", function () {
+  cy.get(pagDetalhes.InputId).should("have.value", userId);
+  cy.get(pagDetalhes.InputName).should("have.value", userName);
+  cy.get(pagDetalhes.InputEmail).should("have.value", emailUser);
 });
