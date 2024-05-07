@@ -189,3 +189,25 @@ When("apago o email", function () {
 Then("aparecerá uma mensagem dizendo: {string}", function (mensagem) {
   cy.contains("span", mensagem).should("be.visible");
 });
+
+When("informo um email inválido {string}", function (emailIvalido) {
+  pgDetalhes.mudarEmail(emailIvalido);
+});
+
+Then(
+  "aparecerá uma mensagem abaixo do email dizendo: {string}",
+  function (mensagem) {
+    cy.contains(mensagem).should("be.visible");
+  }
+);
+
+When("informo um nome inválido {string}", function (nomelInvalido) {
+  pgDetalhes.mudarNome(nomelInvalido);
+});
+
+Then(
+  "aparecerá uma mensagem abaixo do nome dizendo: {string}",
+  function (mensagem) {
+    cy.contains(mensagem).should("be.visible");
+  }
+);
