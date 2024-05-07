@@ -12,4 +12,20 @@ export class PaginaDetalhes {
   mudarEmail(emailAlterado) {
     cy.get(this.InputEmail).type(emailAlterado);
   }
+
+  clicarBotaoEditar() {
+    cy.get(this.buttonEditar).click();
+  }
+
+  clicarBotaoSalvar() {
+    cy.get(this.buttonSalvar).click();
+  }
+
+  apagarNome() {
+    cy.get(this.InputName).clear();
+  }
+
+  apagarEmail() {
+    cy.get(this.InputEmail).clear();
+  }
 }

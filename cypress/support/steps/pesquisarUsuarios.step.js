@@ -6,7 +6,6 @@ import {
   After,
 } from "@badeball/cypress-cucumber-preprocessor";
 import { PaginaPrincipal } from "../pages/PaginaPrincipal";
-import { PaginaDetalhes } from "../pages/PaginaDetalhes";
 
 let pgPrincipal = new PaginaPrincipal();
 let baseURL = "https://rarocrud-frontend-88984f6e4454.herokuapp.com/users/";
@@ -91,4 +90,19 @@ When("clico no botão de apagar", function () {
 
 Then("a pesquisa deve ser apagada do input", function () {
   cy.get(pgPrincipal.inputDePesquisa).should("be.empty");
+});
+
+When(
+  "digito o nome de um usuário inexistente {string}",
+  function (idInexistente) {
+    cy.get("input").type(idInexistente);
+  }
+);
+
+When("clico no link de cadastrar usuário", function () {
+  cy.contains("Cadastre um novo usuário").click();
+});
+
+Then("devo ser direcionado para a página de cadastro de usuário", function () {
+  cy.url().should("equal", baseURL + "novo");
 });

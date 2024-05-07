@@ -11,7 +11,6 @@ export class PaginaPrincipal {
   paginaAnterior = "#paginacaoVoltar";
   paginaProxima = "#paginacaoProximo";
 
-  // ver se vai precisar nos testes
   anchorRaro = '[href="/"]';
   anchorNovo = '[href="/users/novo"]';
 

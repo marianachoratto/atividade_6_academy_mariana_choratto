@@ -56,3 +56,5 @@ Cenário: Apertando o botão ver detalhes de um card de usuário
     Quando aperto o botão ver detalhes
     Então serei redirecionada para a página de detalhes
     E ali estarão as informações de id, nome e email do usuário
+
+# Escrever um id louco na URL "aparece a notificação usuário não encontrado"
