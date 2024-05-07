@@ -3,9 +3,8 @@ import {
   When,
   Then,
   After,
-  But,
   Before,
-} from "cypress-cucumber-preprocessor/steps";
+} from "@badeball/cypress-cucumber-preprocessor";
 import { PaginaDeCastrato } from "../pages/CadastrarUsuarios";
 let cadastroUsuario = new PaginaDeCastrato();
 let userId;
@@ -117,11 +116,11 @@ When("informo um email com 61 caracteres", function () {
   cy.get(cadastroUsuario.inputEmail).type(emailCriado);
 });
 
-But("não informo um nome", function () {});
+When("não informo um nome", function () {});
 
-But("não informo um email", function () {});
+When("não informo um email", function () {});
 
-But("informo um email inválido {string}", function (emailInvalido) {
+When("informo um email inválido {string}", function (emailInvalido) {
   cy.get(cadastroUsuario.inputEmail).type(emailInvalido);
 });
 

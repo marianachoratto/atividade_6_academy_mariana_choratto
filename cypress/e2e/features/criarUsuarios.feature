@@ -26,14 +26,14 @@ Cenário: deve ser possível abrir a página de perfil do usuário através do s
 
 Cenário: Não deve ser possível cadastrar usuário sem nome 
     Quando informo um email válido
-    Mas não informo um nome
+    Quando não informo um nome
     E clico no botão de cadastrar
     Então não é possível cadastrar o usuário sem nome
 
 
 Cenário: Não deve ser possível cadastrar usuário sem email
     Quando informo um nome válido
-    Mas não informo um email
+    Quando não informo um email
     E clico no botão de cadastrar
     Então não é possível cadastrar o usuário sem email
 
@@ -47,7 +47,7 @@ Cenário: Não deve ser possível cadastrar usuário sem nome e email
 
 Esquema do Cenário: Não deve ser possível cadastrar usuário com email inválido
     Quando informo um nome válido
-    Mas informo um email inválido "<emailInvalido>"
+    Quando informo um email inválido "<emailInvalido>"
     Quando clico no botão de cadastrar
     Então aparecerá uma mensagem dizendo que o formato do email é inválido
 

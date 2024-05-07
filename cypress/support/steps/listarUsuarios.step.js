@@ -4,7 +4,7 @@ import {
   Then,
   Before,
   After,
-} from "cypress-cucumber-preprocessor/steps";
+} from "@badeball/cypress-cucumber-preprocessor";
 import { PaginaPrincipal } from "../pages/PaginaPrincipal";
 import { PaginaDetalhes } from "../pages/PaginaDetalhes";
 
@@ -207,11 +207,13 @@ Then("serei redirecionado para a página de cadastro", function () {
 
 When("aperto o botão ver detalhes", function () {
   cy.wait("@getUsers");
+  cy.intercept("GET", "api/v1/users/*").as("detalhesUsuario");
   cy.visit("/users");
   cy.get(pgPrincipal.anchorVerDetalhes).click();
 });
 
 Then("serei redirecionada para a página de detalhes", function () {
+  cy.wait("@detalhesUsuario");
   cy.url().should(
     "equal",
     `https://rarocrud-frontend-88984f6e4454.herokuapp.com/users/${userId}`

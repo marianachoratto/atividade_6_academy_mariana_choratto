@@ -1,10 +1,13 @@
 {
   "dependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.5",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
     "@faker-js/faker": "^8.4.1",
     "cypress": "^13.8.1",
-    "cypress-cucumber-preprocessor": "^4.3.1"
+    "esbuild": "^0.20.2"
   },
   "cypress-cucumber-preprocessor": {
-    "step_definitions": "cypress/support/steps"
+    "nonGlobalStepDefinitions": true,
+    "stepDefinitions": "cypress/support/steps/[filepart].step.js"
   }
 }
