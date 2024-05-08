@@ -87,12 +87,35 @@ Given("vi que havia 12 usuários cadastrados", function () {
   cy.wait("@intercept12Usuarios");
 });
 
-Then("que acessei a página principal", function () {
-  cy.visit("/users");
+Given("vi que não haviam usuários cadastrados", function () {
+  cy.wait("@interceptnoUsers");
 });
 
 When("clico no link R na esquerda da página", function () {
   cy.get(pgPrincipal.anchorRaro).click();
+});
+
+When("clico no link Novo, na esquerda da página", function () {
+  cy.get(pgPrincipal.anchorNovo).click();
+});
+
+When("aperto o botão ver detalhes", function () {
+  cy.wait("@getUsers");
+  cy.intercept("GET", "api/v1/users/*").as("detalhesUsuario");
+  cy.visit("/users");
+  cy.get(pgPrincipal.anchorVerDetalhes).click();
+});
+
+When("clico no botão de próximo", function () {
+  cy.get(pgPrincipal.paginaProxima).click();
+});
+
+When("clico no botão de anterior", function () {
+  cy.get(pgPrincipal.paginaAnterior).click();
+});
+
+Then("que acessei a página principal", function () {
+  cy.visit("/users");
 });
 
 Then("ela atualiza", function () {
@@ -100,10 +123,6 @@ Then("ela atualiza", function () {
     "equal",
     "https://rarocrud-frontend-88984f6e4454.herokuapp.com/users"
   );
-});
-
-When("clico no link Novo, na esquerda da página", function () {
-  cy.get(pgPrincipal.anchorNovo).click();
 });
 
 Then("o site vai até a página esperada", function () {
@@ -178,10 +197,6 @@ Then("o botão de próximo estará desabilitado", function () {
   cy.get(pgPrincipal.paginaProxima).should("be.disabled");
 });
 
-Given("vi que não haviam usuários cadastrados", function () {
-  cy.wait("@interceptnoUsers");
-});
-
 Then(
   "aparecerá uma mensagem dizendo que não há usuários para serem exibidos",
   function () {
@@ -205,13 +220,6 @@ Then("serei redirecionado para a página de cadastro", function () {
   cy.url().should("equal", baseURL + "novo");
 });
 
-When("aperto o botão ver detalhes", function () {
-  cy.wait("@getUsers");
-  cy.intercept("GET", "api/v1/users/*").as("detalhesUsuario");
-  cy.visit("/users");
-  cy.get(pgPrincipal.anchorVerDetalhes).click();
-});
-
 Then("serei redirecionada para a página de detalhes", function () {
   cy.wait("@detalhesUsuario");
   cy.url().should(
@@ -226,18 +234,10 @@ Then("ali estarão as informações de id, nome e email do usuário", function (
   cy.get(pagDetalhes.InputEmail).should("have.value", emailUser);
 });
 
-When("clico no botão de próximo", function () {
-  cy.get(pgPrincipal.paginaProxima).click();
-});
-
 Then("o site passa para a página 2", function () {
   cy.get(pgPrincipal.liTextoPaginas)
     .invoke("text")
     .should("be.equal", "2 de 2");
-});
-
-When("clico no botão de anterior", function () {
-  cy.get(pgPrincipal.paginaAnterior).click();
 });
 
 Then("ele volta para a página 1", function () {
