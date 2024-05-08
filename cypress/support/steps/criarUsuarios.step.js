@@ -70,7 +70,7 @@ When("informo um nome válido", function () {
   cadastroUsuario.typeNome();
 });
 
-When("clico no botão de cadastrar", function () {
+When("confirmo a operação", function () {
   cadastroUsuario.clickcadastrar();
 });
 
@@ -115,8 +115,6 @@ When("informo um email com 61 caracteres", function () {
 
   cy.get(cadastroUsuario.inputEmail).type(emailCriado);
 });
-
-When("não informo um nome", function () {});
 
 When("não informo um email", function () {});
 

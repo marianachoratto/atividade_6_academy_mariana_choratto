@@ -18,7 +18,7 @@ Cenário: Não deve ser possível cadastrar um usuário com e-mail já utilizado
     Então aparecerá uma mensagem informando que o email já foi utilizado
 
 @deletarUsuario
-Cenário: deve ser possível abrir a página de perfil do usuário através do seu id
+Cenário: deve ser possível checar se o usuário foi realmente criado através do seu id
     Quando crio um usuário
     E vejo a confirmação de que o usuário foi salvo
     Então escrevo o id do usuário na URL
@@ -27,28 +27,28 @@ Cenário: deve ser possível abrir a página de perfil do usuário através do s
 Cenário: Não deve ser possível cadastrar usuário sem nome 
     Quando informo um email válido
     Quando não informo um nome
-    E clico no botão de cadastrar
+    E confirmo a operação
     Então não é possível cadastrar o usuário sem nome
 
 
 Cenário: Não deve ser possível cadastrar usuário sem email
     Quando informo um nome válido
     Quando não informo um email
-    E clico no botão de cadastrar
+    E confirmo a operação
     Então não é possível cadastrar o usuário sem email
 
 
 Cenário: Não deve ser possível cadastrar usuário sem nome e email
     Quando não informo um nome 
     E não informo um email
-    Quando clico no botão de cadastrar
+    Quando confirmo a operação
     Então não é possível cadastrar o usuário sem nome e email
 
 
 Esquema do Cenário: Não deve ser possível cadastrar usuário com email inválido
     Quando informo um nome válido
     Quando informo um email inválido "<emailInvalido>"
-    Quando clico no botão de cadastrar
+    Quando confirmo a operação
     Então aparecerá uma mensagem dizendo que o formato do email é inválido
 
     Exemplos: 
@@ -83,19 +83,19 @@ Cenário: Deve ser possível cadastrar usuário com nome de até 100 caracteres
 Cenário: Não deve ser possível cadastrar um nome com mais de 100 caracteres
     Quando informo um nome com 101 caracteres
     E informo um email válido
-    E clico no botão de cadastrar
+    E confirmo a operação
     Então aparecerá uma mensagem que dizendo que o nome só pode ter 100 caracteres
 
 
 Cenário: Não deve ser possível cadastrar um nome com menos de 4 caracteres
     Quando informo um nome com menos de 3 caracteres
     E informo um email válido
-    E clico no botão de cadastrar
+    E confirmo a operação
     Então aparecerá uma mensagem dizendo que o nome deve ter no mínimo 4 caracteres
 
 
 Cenário: Não deve ser possível cadastrar um e-mail com mais de 60 caracteres
     Quando informo um nome válido
     E informo um email com 61 caracteres
-    E clico no botão de cadastrar
+    E confirmo a operação
     Então aparecerá uma mensagem informando que o email suporta apenas 60 caracteres

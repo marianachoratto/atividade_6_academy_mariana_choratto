@@ -5,20 +5,14 @@ import {
   Before,
   After,
 } from "@badeball/cypress-cucumber-preprocessor";
-import { PaginaPrincipal } from "../pages/PaginaPrincipal";
 import { PaginaDetalhes } from "../pages/PaginaDetalhes";
 
-let pgPrincipal = new PaginaPrincipal();
 let pgDetalhes = new PaginaDetalhes();
 let baseUrl = "https://rarocrud-frontend-88984f6e4454.herokuapp.com/users";
-let cadastroURL =
-  "https://rarocrud-frontend-88984f6e4454.herokuapp.com/users/novo";
 let emailUser;
 let userId;
 let userName;
 let emailJaRegistrado;
-// const novoNome = "Usuário Alterado";
-// const novoEmail = "emailalterado@gmail.com";
 
 Before(function () {
   cy.cadastrarUsuário().then(function (resposta) {
@@ -67,6 +61,78 @@ When("clico no botão salvar", function () {
   pgDetalhes.clicarBotaoSalvar();
 });
 
+When("clico no botão de cancelar", function () {
+  cy.contains("Cancelar").click();
+});
+
+When("digito o email de um usuário já cadastrado", function () {
+  pgDetalhes.apagarEmail();
+  pgDetalhes.mudarEmail(emailJaRegistrado);
+});
+
+When("digito um nome com 101 caracteres", function () {
+  let nomeCriado = "";
+  for (let i = 1; i <= 101; i++) {
+    nomeCriado += "a";
+  }
+
+  cy.get(pgDetalhes.InputName).type(nomeCriado);
+});
+
+When("digito um email com 60 caracteres", function () {
+  pgDetalhes.apagarEmail();
+  let emailCriado = "nomeutilizado@dominio.com";
+  for (let i = 1; i <= 35; i++) {
+    emailCriado += "m";
+  }
+
+  cy.get(pgDetalhes.InputEmail).type(emailCriado);
+});
+
+When("apago o nome", function () {
+  pgDetalhes.apagarNome();
+});
+
+When("apago o email", function () {
+  pgDetalhes.apagarEmail();
+});
+
+When("informo um nome inválido {string}", function (nomelInvalido) {
+  pgDetalhes.mudarNome(nomelInvalido);
+});
+
+When("informo um nome com menos de 3 caracteres", function () {
+  pgDetalhes.mudarNome("Ana");
+});
+
+When("escrevo um id inexistente na URL", function () {
+  cy.visit(baseUrl + "/9823342abcds");
+});
+
+When("digito um nome com 100 caracteres", function () {
+  pgDetalhes.apagarNome();
+  let nomeCriado = "";
+  for (let i = 1; i <= 100; i++) {
+    nomeCriado += "a";
+  }
+
+  cy.get(pgDetalhes.InputName).type(nomeCriado);
+});
+
+When("digito um email com 61 caracteres", function () {
+  pgDetalhes.apagarEmail();
+  let emailCriado = "email@.com";
+  for (let i = 1; i <= 51; i++) {
+    emailCriado += "m";
+  }
+
+  cy.get(pgDetalhes.InputEmail).type(emailCriado);
+});
+
+When("informo um email inválido {string}", function (emailIvalido) {
+  pgDetalhes.mudarEmail(emailIvalido);
+});
+
 Then(
   "deverá aparecer uma mensagem de sucesso dizendo {string}",
   function (mensagem) {
@@ -80,6 +146,18 @@ Then(
     cy.url().should("equal", baseUrl);
   }
 );
+
+Then("o nome do card deverá ser {string}", function (nome) {
+  cy.contains("p", "Nome:")
+    .invoke("text")
+    .should("be.equal", "Nome: " + nome);
+});
+
+Then("o email deverá ser {string}", function (mensagem) {
+  cy.contains("p", "E-mail:")
+    .invoke("text")
+    .should("be.equal", "E-mail: " + mensagem);
+});
 
 Then("os inputs de nome e email devem estar desabilitados", function () {
   cy.get(pgDetalhes.InputName).should("be.disabled");
@@ -103,10 +181,6 @@ Then("o botão de salvar se torna habilitado", function () {
   cy.get(pgDetalhes.buttonSalvar).should("be.enabled");
 });
 
-When("clico no botão de cancelar", function () {
-  cy.contains("Cancelar").click();
-});
-
 Then("ele volta a ser um botão de editar", function () {
   cy.contains("Editar").should("exist");
 });
@@ -115,46 +189,12 @@ Then("o botão de salvar fica desabilitado", function () {
   cy.get(pgDetalhes.buttonSalvar).should("be.disabled");
 });
 
-When("digito o email de um usuário já cadastrado", function () {
-  pgDetalhes.apagarEmail();
-  pgDetalhes.mudarEmail(emailJaRegistrado);
-});
-
 Then("recebo a mensagem {string}", function (mensagemDeErro) {
   cy.contains("p", mensagemDeErro).should("exist");
 });
 
-When("digito um nome com 101 caracteres", function () {
-  let nomeCriado = "";
-  for (let i = 1; i <= 101; i++) {
-    nomeCriado += "a";
-  }
-
-  cy.get(pgDetalhes.InputName).type(nomeCriado);
-});
-
 Then("aparecerá uma mensagem dizendo {string}", function (mensagem) {
   cy.contains(mensagem).should("exist");
-});
-
-When("digito um nome com 100 caracteres", function () {
-  pgDetalhes.apagarNome();
-  let nomeCriado = "";
-  for (let i = 1; i <= 100; i++) {
-    nomeCriado += "a";
-  }
-
-  cy.get(pgDetalhes.InputName).type(nomeCriado);
-});
-
-When("digito um email com 61 caracteres", function () {
-  pgDetalhes.apagarEmail();
-  let emailCriado = "email@.com";
-  for (let i = 1; i <= 51; i++) {
-    emailCriado += "m";
-  }
-
-  cy.get(pgDetalhes.InputEmail).type(emailCriado);
 });
 
 Then(
@@ -164,50 +204,14 @@ Then(
   }
 );
 
-When("digito um email com 60 caracteres", function () {
-  pgDetalhes.apagarEmail();
-  let emailCriado = "nomeutilizado@dominio.com";
-  for (let i = 1; i <= 35; i++) {
-    emailCriado += "m";
-  }
-
-  cy.get(pgDetalhes.InputEmail).type(emailCriado);
-});
-
-When("apago o nome", function () {
-  pgDetalhes.apagarNome();
-});
-
 Then("deverá aparecer uma mensagem dizendo: {string}", function (mensagem) {
   cy.contains("span", mensagem).should("be.visible");
-});
-
-When("apago o email", function () {
-  pgDetalhes.apagarEmail();
 });
 
 Then("aparecerá uma mensagem dizendo: {string}", function (mensagem) {
   cy.contains("span", mensagem).should("be.visible");
 });
 
-When("informo um email inválido {string}", function (emailIvalido) {
-  pgDetalhes.mudarEmail(emailIvalido);
+Then("aparece o card {string}", function (mensagem) {
+  cy.contains(mensagem).should("exist");
 });
-
-Then(
-  "aparecerá uma mensagem abaixo do email dizendo: {string}",
-  function (mensagem) {
-    cy.contains(mensagem).should("be.visible");
-  }
-);
-
-When("informo um nome inválido {string}", function (nomelInvalido) {
-  pgDetalhes.mudarNome(nomelInvalido);
-});
-
-Then(
-  "aparecerá uma mensagem abaixo do nome dizendo: {string}",
-  function (mensagem) {
-    cy.contains(mensagem).should("be.visible");
-  }
-);

@@ -67,12 +67,28 @@ Before({ tags: "@noUsers" }, function () {
   }).as("interceptnoUsers");
 });
 
-Then("que acessei a página principal", function () {
-  cy.visit("/users");
-});
-
 Given("desejo dar refresh na página principal", function () {
   cy.get(pgPrincipal.anchorRaro).should("be.visible");
+});
+
+Given("desejo ir para a página de cadastro", function () {
+  cy.get(pgPrincipal.anchorNovo).should("be.visible");
+});
+
+Given("vi que havia 6 usuários cadastrados", function () {
+  cy.wait("@intercept6Usuarios");
+});
+
+Given("vi que havia 2 usuários cadastrados", function () {
+  cy.wait("@intercept2Usuarios");
+});
+
+Given("vi que havia 12 usuários cadastrados", function () {
+  cy.wait("@intercept12Usuarios");
+});
+
+Then("que acessei a página principal", function () {
+  cy.visit("/users");
 });
 
 When("clico no link R na esquerda da página", function () {
@@ -86,20 +102,12 @@ Then("ela atualiza", function () {
   );
 });
 
-Given("desejo ir para a página de cadastro", function () {
-  cy.get(pgPrincipal.anchorNovo).should("be.visible");
-});
-
 When("clico no link Novo, na esquerda da página", function () {
   cy.get(pgPrincipal.anchorNovo).click();
 });
 
 Then("o site vai até a página esperada", function () {
   cy.url().should("equal", baseURL + "novo");
-});
-
-Given("vi que havia 6 usuários cadastrados", function () {
-  cy.wait("@intercept6Usuarios");
 });
 
 Then("o total de cards de usuário deve ser 6", function () {
@@ -127,16 +135,8 @@ Then(
   }
 );
 
-Given("vi que havia 2 usuários cadastrados", function () {
-  cy.wait("@intercept2Usuarios");
-});
-
 Then("o total de cards de usuários deve ser 2", function () {
   cy.get(pgPrincipal.divListaDeUsuarios).should("have.length", 2);
-});
-
-Given("vi que havia 12 usuários cadastrados", function () {
-  cy.wait("@intercept12Usuarios");
 });
 
 Then("na primeira página haverá os usuários de 1 a 6", function () {
@@ -224,4 +224,24 @@ Then("ali estarão as informações de id, nome e email do usuário", function (
   cy.get(pagDetalhes.InputId).should("have.value", userId);
   cy.get(pagDetalhes.InputName).should("have.value", userName);
   cy.get(pagDetalhes.InputEmail).should("have.value", emailUser);
+});
+
+When("clico no botão de próximo", function () {
+  cy.get(pgPrincipal.paginaProxima).click();
+});
+
+Then("o site passa para a página 2", function () {
+  cy.get(pgPrincipal.liTextoPaginas)
+    .invoke("text")
+    .should("be.equal", "2 de 2");
+});
+
+When("clico no botão de anterior", function () {
+  cy.get(pgPrincipal.paginaAnterior).click();
+});
+
+Then("ele volta para a página 1", function () {
+  cy.get(pgPrincipal.liTextoPaginas)
+    .invoke("text")
+    .should("be.equal", "1 de 2");
 });

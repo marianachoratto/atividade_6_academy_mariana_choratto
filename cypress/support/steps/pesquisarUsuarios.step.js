@@ -30,9 +30,43 @@ Given("que acessei a página principal", function () {
   cy.intercept("GET", "/api/v1/search?value=*").as("getPesquisa");
 });
 
+Given("não tem nada escrito na barra de pesquisa", function () {});
+
+Given("digito uma pesquisa no input", function () {
+  pgPrincipal.digitarPesquisa();
+});
+
 When("digito um usuário existente na barra de pesquisa", function () {
   cy.get(pgPrincipal.inputDePesquisa).type(userName);
   cy.wait("@getPesquisa");
+});
+
+When(
+  "digito o email de um usuário existente na barra de pesquisa",
+  function () {
+    cy.get(pgPrincipal.inputDePesquisa).type(emailUser);
+    cy.wait("@getPesquisa");
+  }
+);
+
+When("digito o id de um usuário existente na barra de pesquisa", function () {
+  cy.get(pgPrincipal.inputDePesquisa).type(userId);
+  cy.wait("@getPesquisa");
+});
+
+When("clico no botão de apagar", function () {
+  cy.get(pgPrincipal.buttonsPesquisar).eq(1).click();
+});
+
+When(
+  "digito o nome de um usuário inexistente {string}",
+  function (idInexistente) {
+    cy.get("input").type(idInexistente);
+  }
+);
+
+When("clico no link de cadastrar usuário", function () {
+  cy.contains("Cadastre um novo usuário").click();
 });
 
 Then("o site retorna o card do usuário pesquisado", function () {
@@ -57,52 +91,18 @@ Then("o nome e email do usuário pesquisado", function () {
     });
 });
 
-When(
-  "digito o email de um usuário existente na barra de pesquisa",
-  function () {
-    cy.get(pgPrincipal.inputDePesquisa).type(emailUser);
-    cy.wait("@getPesquisa");
-  }
-);
-
-When("digito o id de um usuário existente na barra de pesquisa", function () {
-  cy.get(pgPrincipal.inputDePesquisa).type(userId);
-  cy.wait("@getPesquisa");
-});
-
 Then("o site retorna a mensagem {string}", function (mensagem) {
   cy.contains("h3", mensagem).should("exist");
 });
-
-Given("não tem nada escrito na barra de pesquisa", function () {});
 
 Then("nenhuma pesquisa será realizada", function () {
   cy.get("@getPesquisa").should("not.exist");
 });
 
-Given("digito uma pesquisa no input", function () {
-  pgPrincipal.digitarPesquisa();
-});
-
-When("clico no botão de apagar", function () {
-  cy.get(pgPrincipal.buttonsPesquisar).eq(1).click();
+Then("devo ser direcionado para a página de cadastro de usuário", function () {
+  cy.url().should("equal", baseURL + "novo");
 });
 
 Then("a pesquisa deve ser apagada do input", function () {
   cy.get(pgPrincipal.inputDePesquisa).should("be.empty");
-});
-
-When(
-  "digito o nome de um usuário inexistente {string}",
-  function (idInexistente) {
-    cy.get("input").type(idInexistente);
-  }
-);
-
-When("clico no link de cadastrar usuário", function () {
-  cy.contains("Cadastre um novo usuário").click();
-});
-
-Then("devo ser direcionado para a página de cadastro de usuário", function () {
-  cy.url().should("equal", baseURL + "novo");
 });

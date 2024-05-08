@@ -8,13 +8,10 @@ Contexto: O cliente deve ter acessado a página de detalhes do usuário desejado
 @deletarUsuario 
 Cenário: Deve conseguir alterar cadastro do usuário (nome e email)
     Quando clico no botão editar
-    E altero o nome e email do usuário "Usuário Alterado", "emailalterado@gmail.com"
+    E altero o nome e email do usuário "Usuário Alteradoooo", "emailalterado4@gmail.com"
     Quando clico no botão salvar
     Então deverá aparecer uma mensagem de sucesso dizendo "Informações atualizadas com sucesso!"
     E o usuário será redirecionado para a página principal do site
-
-
-# Cenário: Checando se as alterações foram efetuadas
 
 
 Cenário: Ao entrar na página de detalhes os inputs nome e id devem estar desabilitados
@@ -63,6 +60,14 @@ Cenário:  Deve ser possível atualizar o nome para que tenha até 100 caractere
     Então deverá aparecer uma mensagem de sucesso dizendo "Informações atualizadas com sucesso!"
 
 
+Cenário: não deve ser possível atualizar nome com menos de 4 caracteres
+    Quando clico no botão editar
+    E apago o nome
+    E informo um nome com menos de 3 caracteres
+    Quando clico no botão salvar
+    Então aparecerá uma mensagem dizendo "Informe pelo menos 4 letras para o nome."
+
+
 Cenário: Não deve ser possível atualizar o e-mail para que tenha mais de 60 caracteres.
     Quando clico no botão editar
     E digito um email com 61 caracteres
@@ -76,11 +81,13 @@ Cenário: Deve ser possível atualizar o e-mail para que tenha até 60 caractere
     Quando clico no botão salvar
     Então deverá aparecer uma mensagem de sucesso dizendo "Informações atualizadas com sucesso!"
 
+
 Cenário: Não deve ser possível alterar dados de usuário sem nome
     Quando clico no botão editar
     E apago o nome
     Quando clico no botão salvar
     Então deverá aparecer uma mensagem dizendo: "O campo nome é obrigatório."
+
 
 Cenário: Não deve ser possível alterar dados de usuário sem email 
     Quando clico no botão editar
@@ -94,7 +101,7 @@ Esquema do Cenário: Não deve ser possível alterar dados de usuário com email
     E apago o email
     Quando informo um email inválido "<emailInvalido>"
     Quando clico no botão salvar
-    Então aparecerá uma mensagem abaixo do email dizendo: "Formato de e-mail inválido"
+    Então aparecerá uma mensagem dizendo: "Formato de e-mail inválido"
 
     Exemplos: 
     |emailInvalido    |
@@ -110,7 +117,7 @@ Esquema do Cenário: Não deve ser possível alterar dados de usuário com nome 
     E apago o nome
     Quando informo um nome inválido "<nomelInvalido>"
     Quando clico no botão salvar
-    Então aparecerá uma mensagem abaixo do nome dizendo: "Formato do nome é inválido."
+    Então aparecerá uma mensagem dizendo: "Formato do nome é inválido."
 
     Exemplos: 
     |nomelInvalido   |
@@ -120,3 +127,6 @@ Esquema do Cenário: Não deve ser possível alterar dados de usuário com nome 
     |$abrina         |
 
 
+Cenário: Caso nenhum usuário seja localizado pelo identificador único, a atualização não deve ser realizada
+    Quando escrevo um id inexistente na URL
+    Então aparece o card "Não foi possível localizar o usuário."
